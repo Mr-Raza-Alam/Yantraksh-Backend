@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDB } from "./src/config/database";
 import authRoutes from './src/modules/auth/auth.route'
 import { errorHandler } from "./src/middlewares/errorHandler";
+import merchRoutes from './src/modules/merch/merch.route'
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRoutes)
+app.use("/merch", merchRoutes)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
