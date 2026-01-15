@@ -6,6 +6,7 @@ import authRoutes from './src/modules/auth/auth.route'
 import { errorHandler } from "./src/middlewares/errorHandler";
 import merchRoutes from './src/modules/merch/merch.route'
 import job from "./src/config/cron";
+import mailRoutes from './src/modules/mail/mail.routes';
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRoutes)
 app.use("/merch", merchRoutes)
+app.use('/api/mail', mailRoutes);
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
