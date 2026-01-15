@@ -122,3 +122,46 @@ export const broadcastToLeaders = async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const sendMemberAddedEmail = async (req: Request, res: Response) => {
+    const { teamId, memberId } = req.body;
+    if (!teamId || !memberId) {
+        res.status(400).json({ error: "Please provide both teamId and memberId" });
+        return;
+    }
+
+    try {
+        const team = await prisma.team.findUnique({
+            where: { id: teamId }
+        });
+
+        const member = await prisma.user.findUnique({
+            where: { id: memberId }
+        });
+
+        if (!team) {
+             res.status(404).json({ error: "Team not found" });
+             return;
+        }
+        if (!member) {
+             res.status(404).json({ error: "Member (User) not found" });
+             return;
+        }
+
+        await sendEmail(
+            member.email,
+            `You have been added to Team ${team.name}`,
+            "memberAdded",
+            { 
+                memberName: member.name, 
+                teamName: team.name 
+            }
+        );
+
+        res.status(200).json({ message: "Member notification email sent successfully" });
+
+    } catch (error: any) {
+        console.error("Error sending member mail:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
