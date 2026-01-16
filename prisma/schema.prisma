@@ -12,6 +12,7 @@ generator client {
 enum UserType {
   AUS_STUDENT
   NON_AUS
+  ADMIN
 }
 
 enum CompetitionType {

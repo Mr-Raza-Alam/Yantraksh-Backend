@@ -24,14 +24,14 @@ export class CompetitionController {
   };
 
   getCompetitionById = async (req: Request, res: Response) => {
-    const competition = await this.competitionService.getCompetitionById(req.params.id);
+    const competition = await this.competitionService.getCompetitionById(req.params.id as string);
     res.status(200).json({
       success:true, data:competition});
   };
 
   updateCompetition = async (req: Request, res: Response) => {
     const competition = await this.competitionService.updateCompetition(
-      req.params.id,
+      req.params.id as string,
       req.body
     );
     res.status(200).json({
@@ -39,7 +39,7 @@ export class CompetitionController {
   };
 
   deleteCompetition = async (req: Request, res: Response) => {
-    await this.competitionService.deleteCompetition(req.params.id);
+    await this.competitionService.deleteCompetition(req.params.id as string);
     res.status(200).json({
       success:true, message:"Competition Deleted Successfully"});
   };

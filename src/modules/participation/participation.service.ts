@@ -10,7 +10,9 @@ type ParticipationCreateData = {
 type ParticipationUpdateData = Partial<ParticipationCreateData>;
 
 export class ParticipationService {
-  constructor(private participationRepo: ParticipationRepository) {}
+  constructor(
+    private participationRepo: ParticipationRepository,
+  ) {}
 
   async createParticipation(data: ParticipationCreateData) {
     const existing = await this.participationRepo.findByCompetition(data.competitionId);

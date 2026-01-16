@@ -18,3 +18,18 @@ export const requireUser = (
         return res.status(401).json({ msg: "Invalid token" })
     }
 };
+
+export const requireAdmin = (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    if(!req.user){
+        return res.status(401).json({ msg: "Unauthorized" });
+    }
+    if (req.user.userType !== "ADMIN") {
+        return res.status(403).json({ msg: "Access denied. Admins only." });
+    }
+
+    next();
+}
