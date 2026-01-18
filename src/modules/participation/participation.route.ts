@@ -1,3 +1,4 @@
+import { requireAdmin, requireUser } from './../../middlewares/requireUser';
 import { Router } from "express";
 import { validate } from "../../middlewares/validate";
 import { ParticipationController } from "./participation.controller";

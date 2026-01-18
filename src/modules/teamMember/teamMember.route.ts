@@ -8,6 +8,7 @@ import {
   teamIdAndUserIdParamSchema,
   createTeamMemberSchema,
 } from "./teamMember.validator";
+import { requireUser } from "../../middlewares/requireUser";
 
 const router = Router();
 const controller = new TeamMemberController();
@@ -17,7 +18,7 @@ router.get("/", controller.getAllTeamMembers);
 router.get("/:id", validate(teamMemberIdParamSchema), controller.getTeamMemberById);
 router.get("/team/:teamId", validate(teamIdParamSchema), controller.getTeamMembersByTeam);
 router.get("/user/:userId", validate(userIdParamSchema), controller.getTeamMembersByUser);
-router.delete("/:id", validate(teamMemberIdParamSchema), controller.deleteTeamMember);
-router.delete( "/team/:teamId/user/:userId", validate(teamIdAndUserIdParamSchema), controller.deleteTeamMemberByTeamAndUser);
+router.delete("/:id", validate(teamMemberIdParamSchema),requireUser, controller.deleteTeamMember);
+router.delete( "/team/:teamId/user/:userId", validate(teamIdAndUserIdParamSchema),requireUser, controller.deleteTeamMemberByTeamAndUser);
 
 export default router;
