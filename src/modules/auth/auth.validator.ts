@@ -5,9 +5,11 @@ export const registerSchema = z.object({
         name: z.string().min(1),
         email: z.email(),
         password: z.string().min(6),
-        userType: z.enum(["AUS_STUDENT", "NON_AUS","ADMIN"]),
+        userType: z.enum(["AUS_STUDENT", "NON_AUS", "ADMIN"]),
         rollNumber: z.string().optional(),
         department: z.string().optional(),
+        college: z.string().optional(),
+        phone: z.string().optional(),
         year: z.number().optional(),
     })
 });

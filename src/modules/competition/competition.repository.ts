@@ -1,37 +1,43 @@
 import prisma from "../../config/client";
 
 type CompetitionCreateData = {
-  name: string;
+  title: string;
+  category: string;
+  prize: string;
   type: "SOLO" | "TEAM";
-  prize: number;
+  image: string;
+  specs: string[];
 };
 
 type CompetitionUpdateData = Partial<CompetitionCreateData>;
 
 export default class CompetitionRepository {
   create(data: CompetitionCreateData) {
-    return prisma.competition.create({data});
+    return prisma.competition.create({ data });
   }
 
   findAll() {
     return prisma.competition.findMany({
-      orderBy: {createdAt: "desc"},
+      orderBy: { createdAt: "desc" },
     });
   }
 
   findById(id: string) {
-    return prisma.competition.findUnique({ 
-      where:{ id }});
+    return prisma.competition.findUnique({
+      where: { id }
+    });
   }
 
   updateById(id: string, data: CompetitionUpdateData) {
     return prisma.competition.update({
-       where:{id},data});
+      where: { id }, data
+    });
   }
 
   deleteById(id: string) {
-    return prisma.competition.delete({ 
-      where:{id}});
+    return prisma.competition.delete({
+      where: { id }
+    });
   }
 }
 

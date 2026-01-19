@@ -41,7 +41,10 @@ export const updateTeamSchema = z.object({
 
 export const addTeamMemberSchema = z.object({
   body: z.object({
-    userId: z.string().min(1, "User id is required"),
+    userId: z.string().optional(),
+    email: z.string().email().optional(),
+  }).refine((data) => data.userId || data.email, {
+    message: "Either userId or email must be provided",
   }),
 });
 

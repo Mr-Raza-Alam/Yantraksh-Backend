@@ -40,9 +40,11 @@ model User {
   name         String
   email        String     @unique
   password     String
-  userType     UserType
+  userType     UserType?
   rollNumber   String?
   department   String?
+  college      String?
+  phone        String?
   year         Int?
 
   participations Participation[]
@@ -57,9 +59,12 @@ model User {
 
 model Competition {
   id          String          @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
+  title       String
+  category    String
+  prize       String
   type        CompetitionType
-  prize       Int
+  image       String
+  specs       String[]
 
   participations Participation[]
   teams          Team[]
@@ -77,8 +82,8 @@ model Participation {
   competitionId  String        @db.ObjectId
   teamId         String?       @db.ObjectId
 
-  user           User          @relation(fields: [userId], references: [id],onDelete: NoAction, onUpdate: NoAction)
-  competition    Competition   @relation(fields: [competitionId], references: [id],onDelete: NoAction, onUpdate: NoAction)
+  user           User?         @relation(fields: [userId], references: [id],onDelete: NoAction, onUpdate: NoAction)
+  competition    Competition?  @relation(fields: [competitionId], references: [id],onDelete: NoAction, onUpdate: NoAction)
   team           Team?         @relation(fields: [teamId], references: [id],onDelete: NoAction, onUpdate: NoAction)
 
   createdAt      DateTime @default(now())
@@ -103,6 +108,11 @@ model Team {
   updatedAt       DateTime @updatedAt
 }
 
+enum TeamMemberStatus {
+  PENDING
+  CONFIRMED
+}
+
 // ---------------------- TEAM MEMBER ----------------------
 
 model TeamMember {
@@ -110,6 +120,8 @@ model TeamMember {
 
   teamId    String  @db.ObjectId
   userId    String  @db.ObjectId
+  
+  status    TeamMemberStatus @default(CONFIRMED)
 
   team      Team    @relation(fields: [teamId], references: [id],onDelete: NoAction, onUpdate: NoAction)
   user      User    @relation(fields: [userId], references: [id],onDelete: NoAction, onUpdate: NoAction)
@@ -139,6 +151,8 @@ model Merch {
   description String?
   price       Int
   stock       Int
+  image       String?
+  sizes       String[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

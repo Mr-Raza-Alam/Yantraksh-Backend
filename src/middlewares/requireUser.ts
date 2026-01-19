@@ -13,6 +13,7 @@ export const requireUser = (
 
     try {
         req.user = jwt.verify(token, process.env.JWT_SECRET!) as IAuthToken
+        res.locals.user = req.user;
         next()
     } catch {
         return res.status(401).json({ msg: "Invalid token" })
@@ -24,7 +25,7 @@ export const requireAdmin = (
     res: Response,
     next: NextFunction
 ) => {
-    if(!req.user){
+    if (!req.user) {
         return res.status(401).json({ msg: "Unauthorized" });
     }
     if (req.user.userType !== "ADMIN") {

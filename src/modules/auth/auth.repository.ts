@@ -1,22 +1,33 @@
 import prisma from "../../config/client";
 import { IUserCreate } from "../../types/user";
 
-export class AuthRepository{
-    findByEmail(email:string){
+export class AuthRepository {
+    findByEmail(email: string) {
         return prisma.user.findUnique({
-            where:{
+            where: {
                 email
             }
         })
     }
-    createUser(data: IUserCreate){
-        return prisma.user.create({data})
+    createUser(data: IUserCreate) {
+        return prisma.user.create({ data })
     }
-    findById(id:string){
+    findById(id: string) {
         return prisma.user.findUnique({
-            where:{
+            where: {
                 id
             }
         })
+    }
+
+    findAll() {
+        return prisma.user.findMany();
+    }
+
+    updateUserRole(id: string, userType: any) {
+        return prisma.user.update({
+            where: { id },
+            data: { userType }
+        });
     }
 }

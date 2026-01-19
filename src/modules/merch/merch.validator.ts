@@ -3,10 +3,11 @@ import { z } from "zod";
 export const createMerchSchema = z.object({
   body: z.object({
     name: z.string().min(3),
+    description: z.string().optional(),
     price: z.number().positive(),
-    sizes: z.array(z.enum(["S", "M", "L", "XL"])),
+    sizes: z.array(z.string()).optional(), // Changed to generic string array or keep enum if strict
     stock: z.number().int().nonnegative(),
-    imageUrl: z.string().url()
+    image: z.string().url().optional()
   })
 });
 
@@ -14,10 +15,10 @@ export const createMerchSchema = z.object({
 export const updateMerchSchema = z.object({
   body: z.object({
     name: z.string().min(3).optional(),
+    description: z.string().optional(),
     price: z.number().positive().optional(),
-    sizes: z.array(z.enum(["S", "M", "L", "XL"])).optional(),
+    sizes: z.array(z.string()).optional(),
     stock: z.number().int().nonnegative().optional(),
-    imageUrl: z.string().url().optional(),
-    isActive: z.boolean().optional()
+    image: z.string().url().optional(),
   })
 });

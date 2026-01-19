@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const competitionTypeSchema = z.enum(["SOLO", "TEAM"]);
 
@@ -10,17 +10,23 @@ export const competitionIdParamSchema = z.object({
 
 export const createCompetitionSchema = z.object({
   body: z.object({
-    name: z.string().min(2),
+    title: z.string().min(2),
+    category: z.string().min(1),
+    prize: z.string(),
     type: competitionTypeSchema,
-    prize: z.number().int().nonnegative(),
+    image: z.string().url().or(z.string()), // Accept URL or string path
+    specs: z.array(z.string()),
   }),
 });
 
 export const updateCompetitionSchema = z.object({
   body: z.object({
-    name: z.string().min(2).optional(),
+    title: z.string().min(2).optional(),
+    category: z.string().min(1).optional(),
+    prize: z.string().optional(),
     type: competitionTypeSchema.optional(),
-    prize: z.number().int().nonnegative().optional(),
+    image: z.string().optional(),
+    specs: z.array(z.string()).optional(),
   }),
 });
 

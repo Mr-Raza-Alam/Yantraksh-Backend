@@ -20,7 +20,7 @@ export class AuthService {
         data.password = await bcrypt.hash(data.password, 10)
 
         const user = await this.repo.createUser(data);
-        return this.generateToken(user.id,user.userType);
+        return this.generateToken(user.id, user.userType);
     }
 
     async login(body: any): Promise<string> {
@@ -30,7 +30,7 @@ export class AuthService {
         const ok = await bcrypt.compare(body.password, user.password)
         if (!ok) throw new AppError("Invalid email or password", 401)
 
-        return this.generateToken(user.id,user.userType)
+        return this.generateToken(user.id, user.userType)
     }
 
     async me(id: string): Promise<IUserSafe | null> {
@@ -46,7 +46,16 @@ export class AuthService {
         };
     }
 
-    private generateToken(id: string,userType:string): string {
-        return jwt.sign({ id,userType }, process.env.JWT_SECRET!, { expiresIn: "7d" })
+    private generateToken(id: string, userType: string): string {
+        return jwt.sign({ id, userType }, process.env.JWT_SECRET!, { expiresIn: "7d" })
+    }
+
+    async getAllUsers() {
+        return this.repo.findAll();
+    }
+
+    async changeUserRole(userId: string, userType: string) {
+        // Validate userType if needed, though Zod checks payload usually
+        return this.repo.updateUserRole(userId, userType);
     }
 }

@@ -2,15 +2,18 @@ import { AppError } from "../../core/AppError";
 import CompetitionRepository from "./competition.repository";
 
 type CompetitionCreateData = {
-  name: string;
+  title: string;
+  category: string;
+  prize: string;
   type: "SOLO" | "TEAM";
-  prize: number;
+  image: string;
+  specs: string[];
 };
 
 type CompetitionUpdateData = Partial<CompetitionCreateData>;
 
 export class CompetitionService {
-  constructor(private CompetitionRepository: CompetitionRepository) {}
+  constructor(private CompetitionRepository: CompetitionRepository) { }
 
   async createCompetition(data: CompetitionCreateData) {
     return this.CompetitionRepository.create(data);

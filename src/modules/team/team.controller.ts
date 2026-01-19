@@ -67,7 +67,13 @@ export class TeamController {
   };
 
   addTeamMember = async (req: Request, res: Response) => {
-    const member = await this.teamService.addTeamMember(req.params.teamId, req.body.userId);
+    let member;
+    if (req.body.email) {
+      member = await this.teamService.addTeamMemberByEmail(req.params.teamId, req.body.email);
+    } else {
+      member = await this.teamService.addTeamMember(req.params.teamId, req.body.userId);
+    }
+
     res.status(201).json({
       success: true,
       data: member,
@@ -89,4 +95,41 @@ export class TeamController {
       data: members,
     });
   };
+
+  acceptInvitation = async (req: Request, res: Response) => {
+    // Assuming userId comes from auth middleware (req.user.id)
+    // But route might differ. Let's see. 
+    // Route: /teams/:teamId/accept 
+    // We need to know WHICH user is accepting. It must be the logged in user.
+    const userId = res.locals.user.id;
+    await this.teamService.acceptInvitation(req.params.teamId, userId);
+    res.status(200).json({ success: true, message: "Invitation accepted" });
+  }
+
+  rejectInvitation = async (req: Request, res: Response) => {
+    const userId = res.locals.user.id;
+    await this.teamService.rejectInvitation(req.params.teamId, userId);
+    res.status(200).json({ success: true, message: "Invitation rejected" });
+  }
+
+  getPendingInvitations = async (req: Request, res: Response) => {
+    console.log("TeamController.getPendingInvitations called");
+    const userId = res.locals.user?.id;
+    console.log("UserID from locals:", userId);
+
+    if (!userId) {
+      console.error("User ID missing in locals");
+      res.status(401).json({ success: false, message: "Unauthorized" });
+      return;
+    }
+
+    try {
+      const invites = await this.teamService.getPendingInvitations(userId);
+      console.log("Invites fetched:", invites);
+      res.status(200).json({ success: true, data: invites });
+    } catch (err) {
+      console.error("Error in getPendingInvitations:", err);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+  }
 }

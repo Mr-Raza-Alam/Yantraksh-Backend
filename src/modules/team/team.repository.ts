@@ -15,7 +15,7 @@ export default class TeamRepository {
       include: {
         leader: {
           select: {
-            id: true,  name: true, email: true,  userType: true,
+            id: true, name: true, email: true, userType: true,
           },
         },
         competition: true,
@@ -23,7 +23,7 @@ export default class TeamRepository {
           include: {
             user: {
               select: {
-                id: true,  name: true,  email: true,  userType: true,
+                id: true, name: true, email: true, userType: true,
               },
             },
           },
@@ -38,7 +38,7 @@ export default class TeamRepository {
       include: {
         leader: {
           select: {
-            id: true,  name: true,  email: true,  userType: true,
+            id: true, name: true, email: true, userType: true,
           },
         },
         competition: true,
@@ -46,7 +46,7 @@ export default class TeamRepository {
           include: {
             user: {
               select: {
-                id: true,  name: true,  email: true,  userType: true,
+                id: true, name: true, email: true, userType: true,
               },
             },
           },
@@ -68,7 +68,7 @@ export default class TeamRepository {
         members: {
           include: {
             user: {
-               select: {
+              select: {
                 id: true, name: true, email: true, userType: true,
               },
             },
@@ -156,10 +156,10 @@ export default class TeamRepository {
     });
   }
 
-  addMember(teamId: string, userId: string) {
+  addMember(teamId: string, userId: string, status: "PENDING" | "CONFIRMED" = "CONFIRMED") {
     return prisma.teamMember.create({
       data: {
-        teamId,  userId,
+        teamId, userId, status
       },
       include: {
         user: {
@@ -174,7 +174,7 @@ export default class TeamRepository {
   removeMember(teamId: string, userId: string) {
     return prisma.teamMember.deleteMany({
       where: {
-        teamId,  userId,
+        teamId, userId,
       },
     });
   }
@@ -182,7 +182,7 @@ export default class TeamRepository {
   findMember(teamId: string, userId: string) {
     return prisma.teamMember.findFirst({
       where: {
-        teamId,  userId,
+        teamId, userId,
       },
     });
   }
@@ -193,10 +193,17 @@ export default class TeamRepository {
       include: {
         user: {
           select: {
-            id: true,  name: true,  email: true,  userType: true,
+            id: true, name: true, email: true, userType: true,
           },
         },
       },
+    });
+  }
+
+  updateMemberStatus(teamId: string, userId: string, status: "PENDING" | "CONFIRMED") {
+    return prisma.teamMember.updateMany({
+      where: { teamId, userId },
+      data: { status },
     });
   }
 }

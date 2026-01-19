@@ -7,6 +7,8 @@ export interface IUserCreate {
     userType: UserType
     rollNumber?: string
     department?: string
+    college?: string
+    phone?: string
     year?: number
 }
 
@@ -17,6 +19,8 @@ export interface IUserSafe {
     userType: UserType
     rollNumber?: string
     department?: string
+    college?: string
+    phone?: string
     year?: number
     createdAt: Date
     updatedAt: Date
